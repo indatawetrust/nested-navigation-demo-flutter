@@ -58,9 +58,9 @@ class AppState extends State<App> {
           !await navigatorKeys[currentTab].currentState.maybePop(),
       child: PageView(
         body: Stack(children: <Widget>[
-          _buildOffstageNavigator(TabItem.red),
-          _buildOffstageNavigator(TabItem.green),
-          _buildOffstageNavigator(TabItem.blue),
+          _buildNavigator(TabItem.red),
+          _buildNavigator(TabItem.green),
+          _buildNavigator(TabItem.blue),
         ],
         controller: pageController,
         onPageChanged: onPageChanged),
@@ -72,13 +72,10 @@ class AppState extends State<App> {
     );
   }
 
-  Widget _buildOffstageNavigator(TabItem tabItem) {
-    return Offstage(
-      offstage: currentTab != tabItem,
-      child: TabNavigator(
-        navigatorKey: navigatorKeys[tabItem],
-        tabItem: tabItem,
-      ),
+  Widget _buildNavigator(TabItem tabItem) {
+    return TabNavigator(
+      navigatorKey: navigatorKeys[tabItem],
+      tabItem: tabItem,
     );
   }
 }
