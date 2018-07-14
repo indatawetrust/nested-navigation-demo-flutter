@@ -56,8 +56,8 @@ class AppState extends State<App> {
     return WillPopScope(
       onWillPop: () async =>
           !await navigatorKeys[currentTab].currentState.maybePop(),
-      child: PageView(
-        body: Stack(children: <Widget>[
+      child: Scaffold(
+        body: PageView(children: <Widget>[
           _buildNavigator(TabItem.red),
           _buildNavigator(TabItem.green),
           _buildNavigator(TabItem.blue),
