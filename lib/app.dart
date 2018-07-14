@@ -8,16 +8,46 @@ class App extends StatefulWidget {
 }
 
 class AppState extends State<App> {
+  int page = 0;
   TabItem currentTab = TabItem.red;
   Map<TabItem, GlobalKey<NavigatorState>> navigatorKeys = {
     TabItem.red: GlobalKey<NavigatorState>(),
     TabItem.green: GlobalKey<NavigatorState>(),
     TabItem.blue: GlobalKey<NavigatorState>(),
   };
+  
+  @override
+  void initState() {
+    pageController = new PageController(initialPage: this.page);
+  }
 
   void _selectTab(TabItem tabItem) {
     setState(() {
       currentTab = tabItem;
+    });
+
+    if (tabItem == TabItem.red) {
+      pageController.jumpToPage(0);
+    } else if (tabItem == TabItem.green) {
+      pageController.jumpToPage(1);
+    } else if (tabItem == TabItem.blue) {
+      pageController.jumpToPage(2);
+    }
+  }
+  
+  void onPageChanged(int page) {
+    setState(() {
+      switch (page) {
+        case 0:
+            currentTab = TabItem.red;
+          break;
+        case 1:
+            currentTab = TabItem.green;
+          break;
+        case 2:
+            currentTab = TabItem.blue;
+          break;
+      }
     });
   }
 
@@ -26,12 +56,14 @@ class AppState extends State<App> {
     return WillPopScope(
       onWillPop: () async =>
           !await navigatorKeys[currentTab].currentState.maybePop(),
-      child: Scaffold(
+      child: PageView(
         body: Stack(children: <Widget>[
           _buildOffstageNavigator(TabItem.red),
           _buildOffstageNavigator(TabItem.green),
           _buildOffstageNavigator(TabItem.blue),
-        ]),
+        ],
+        controller: pageController,
+        onPageChanged: onPageChanged),
         bottomNavigationBar: BottomNavigation(
           currentTab: currentTab,
           onSelectTab: _selectTab,
